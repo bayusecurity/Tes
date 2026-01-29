@@ -1,0 +1,23 @@
+{
+  "name": "OSCAR INVICTUS",
+  "version": "3.1",
+  "main": "oscar.js",
+  "scripts": {
+    "start": "node oscar.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "github:Bealllevey62/XataBaileys",
+    "moment": "^2.30.1",
+    "axios": "^1.6.8",
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.2.0",
+    "js-confuser": "^1.5.0",
+    "dotenv": "^16.4.7",
+    "node-telegram-bot-api": "^0.64.0",
+    "pino": "^9.6.0"
+  },
+  "keywords": ["whatsapp-bot", "baileys", "crow"],
+  "author": "AzzOffcial",
+  "license": "ISC",
+  "description": "WhatsApp bot using Baileys"
+}
